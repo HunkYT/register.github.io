@@ -1,50 +1,45 @@
 <?php
+
+// Проверяем, была ли отправлена форма
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Отримання даних з форми
-    $username = trim($_POST["username"]);
-    $email = trim($_POST["email"]);
-    $password = trim($_POST["password"]);
-    $confirm_password = trim($_POST["confirm_password"]);
+    // Получаем данные из формы
+    $name = $_POST["name"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    $confirmPassword = $_POST["confirm_password"];
 
-   
-    $errors = [];
-
-    // Перевірка імені користувача
-    if (empty($username)) {
-        $errors[] = "Ім'я користувача є обов'язковим.";
-    } elseif (strlen($username) < 3 || strlen($username) > 20) {
-        $errors[] = "Ім'я користувача має містити від 3 до 20 символів.";
+    // Проверяем, что имя не менее 3 символов
+    if (strlen($name) < 3) {
+        echo "Имя должно содержать не менее 3 символов.";
     }
-
-    // Перевірка електронної пошти
-    if (empty($email)) {
-        $errors[] = "Електронна пошта є обов'язковою.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Невірний формат електронної пошти.";
+    // Проверяем, что пароль не менее 6 символов
+    elseif (strlen($password) < 6) {
+        echo "Пароль должен содержать не менее 6 символов.";
     }
-
-    // Перевірка паролю
-    if (empty($password)) {
-        $errors[] = "Пароль є обов'язковим.";
-    } elseif (strlen($password) < 6) {
-        $errors[] = "Пароль має містити принаймні 6 символів.";
+    // Проверяем, совпадают ли пароль и подтверждение пароля
+    elseif ($password != $confirmPassword) {
+        echo "Пароль и подтверждение пароля не совпадают.";
     }
-
-    // Перевірка підтвердження паролю
-    if (empty($confirm_password)) {
-        $errors[] = "Підтвердження паролю є обов'язковим.";
-    } elseif ($password !== $confirm_password) {
-        $errors[] = "Паролі не співпадають.";
-    }
-
-    // Вивід результату перевірки
-    if (empty($errors)) {
-        echo "Реєстрація пройшла успішно!";
-        
-    } else {
-        foreach ($errors as $error) {
-            echo "<p>$error</p>";
-        }
+    // Если все проверки прошли успешно, регистрируем пользователя
+    else {
+        // Здесь добавляем код для регистрации пользователя на сервере
+        echo "Пользователь успешно зарегистрирован.";
     }
 }
 ?>
+
+<form method="post" action="">
+    <label for="name">Имя:</label>
+    <input type="text" name="name" id="name" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required><br><br>
+
+    <label for="password">Пароль:</label>
+    <input type="password" name="password" id="password" required><br><br>
+
+    <label for="confirm_password">Подтверждение пароля:</label>
+    <input type="password" name="confirm_password" id="confirm_password" required><br><br>
+
+    <input type="submit" value="Зарегистрироваться">
+</form>
